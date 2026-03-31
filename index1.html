@@ -1,1 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Trị Map For Success</title>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --accent: #D4AF37;
+            --bg: #f0f2f5;
+            --white: #ffffff;
+        }
 
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Màn hình Đăng nhập */
+        #login-screen {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border-top: 5px solid var(--primary);
+        }
+
+        .logo-area h1 { color: var(--primary); margin-bottom: 5px; font-size: 24px; }
+        .logo-area p { color: var(--accent); margin-top: 0; font-style: italic; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        button:hover { background: #0d1642; }
+
+        /* Màn hình Chi tiết (Dashboard) */
+        #detail-screen {
+            display: none;
+            width: 95%;
+            max-width: 1100px;
+            margin: 20px auto;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .dashboard-header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .section-box {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .section-title {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+
+        .stat-label { font-size: 14px; color: #666; }
+        .stat-value { font-weight: bold; color: var(--primary); font-size: 18px; }
+
+        .master-number { color: #d32f2f !important; }
+
+        .pinnacle-badge {
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <div class="logo-area">
+        <h1>MAP FOR SUCCESS</h1>
+        <p>Thấu hiểu bản thân - Làm chủ cuộc đời</p>
+    </div>
+    <div style="margin: 25px 0;">
+        <input type="text" id="inputName" placeholder="Họ và tên (VD: NGUYỄN HIỀN HOÀ)">
+        <input type="text" id="inputDOB" placeholder="Ngày sinh (VD: 08/11/1984)">
+        <button onclick="checkAuth()">XEM CHI TIẾT BẢN ĐỒ</button>
+    </div>
+    <p id="errMsg" style="color: red; font-size: 13px;"></p>
+</div>
+
+<div id="detail-screen">
+    <div class="dashboard-header">
+        <div>
+            <h2 id="userNameDisplay" style="margin:0">NGUYỄN HIỀN HOÀ</h2>
+            <span id="userDOBDisplay">08/11/1984</span>
+        </div>
+        <button onclick="location.reload()" style="width: auto; margin:0; padding: 10px 20px; background: var(--accent)">ĐĂNG XUẤT</button>
+    </div>
+
+    <div class="grid-container">
+        <div class="section-box">
+            <div class="section-title">TAM GIÁC VÀNG <span>Cốt Lõi</span></div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Đường đời</span>
+                <span class="stat-value">5</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Sứ mệnh</span>
+                <span class="stat-value">2</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Linh hồn</span>
+                <span class="stat-value">2</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Liên kết ĐĐ - SM</span>
+                <span class="stat-value">3</span>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">PHÁT TRIỂN <span>Năng Lực</span></div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Ngày sinh</span>
+                <span class="stat-value">8</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Nhân cách</span>
+                <span class="stat-value">9</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Thái độ</span>
+                <span class="stat-value">1</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Trưởng thành</span>
+                <span class="stat-value">7</span>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">NỘI TẠI <span>Thách Thức</span></div>
+            <div class="stat-row">
+                <span class="stat-label">Sức mạnh Tiềm thức</span>
+                <span class="stat-value">7</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Đam mê</span>
+                <span class="stat-value">5</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chỉ số Thiếu</span>
+                <span class="stat-value">2, 4</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Tư duy Lý trí</span>
+                <span class="stat-value">5</span>
+            </div>
+        </div>
+
+        <div class="section-box" style="grid-column: span 1;">
+            <div class="section-title">4 CHẶNG ĐỈNH CAO <span>Thành Công</span></div>
+            <div class="stat-row">
+                <span class="stat-label">Chặng 1 (0-31t)</span>
+                <span class="stat-value">1 <small class="pinnacle-badge">Khởi đầu</small></span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chặng 2 (32-40t)</span>
+                <span class="stat-value">3 <small class="pinnacle-badge">Lan tỏa</small></span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chặng 3 (41-49t)</span>
+                <span class="stat-value">4 <small class="pinnacle-badge">Vững chãi</small></span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Chặng 4 (50t+)</span>
+                <span class="stat-value">6 <small class="pinnacle-badge">Cống hiến</small></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkAuth() {
+        const name = document.getElementById('inputName').value.trim().toUpperCase();
+        const dob = document.getElementById('inputDOB').value.trim();
+        const err = document.getElementById('errMsg');
+
+        // Thông tin chuẩn xác từ file mpdf.pdf
+        const validName = "NGUYỄN HIỀN HOÀ";
+        const validDOB = "08/11/1984";
+
+        if (name === validName && dob === validDOB) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('detail-screen').style.display = 'block';
+            document.body.style.alignItems = 'flex-start';
+        } else {
+            err.innerText = "Thông tin không chính xác. Vui lòng kiểm tra lại!";
+        }
+    }
+
+    // Hỗ trợ nhấn Enter để đăng nhập
+    document.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') checkAuth();
+    });
+</script>
+
+</body>
+</html>
