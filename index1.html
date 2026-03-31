@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Trị Map For Success - Pythagoras chuẩn</title>
+    <title>Hệ Thống Quản Trị Map For Success - Pythagoras Elite</title>
     <style>
         :root {
             --primary: #1a237e;
             --accent: #D4AF37;
-            --bg: #f4f7f9;
+            --bg: #f0f2f5;
             --white: #ffffff;
-            --text: #2c3e50;
-            --danger: #e74c3c;
+            --text: #1c2a38;
+            --danger: #c0392b;
+            --success: #27ae60;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
             margin: 0;
@@ -23,331 +24,315 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            transition: all 0.5s ease;
         }
 
         #auth-container {
             background: var(--white);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             text-align: center;
-            border-top: 6px solid var(--primary);
+            border-top: 8px solid var(--accent);
         }
 
-        .auth-header h2 { color: var(--primary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .auth-header p { color: var(--accent); margin-top: 0; font-weight: 500; }
+        .auth-header h2 { color: var(--primary); margin-bottom: 8px; letter-spacing: 2px; }
+        .auth-header p { color: #666; margin-bottom: 30px; font-style: italic; }
 
-        .input-box { position: relative; margin: 20px 0; }
         input {
             width: 100%;
-            padding: 14px 15px;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(26,35,126,0.1); }
-
-        .btn-login {
-            width: 100%;
             padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--accent); outline: none; background: #fffcf5; }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 17px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.4s;
+            margin-top: 20px;
+            transition: 0.3s;
         }
-        .btn-login:hover { background: #000051; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-primary:hover { background: #0d1248; transform: translateY(-2px); }
 
         #dashboard {
             display: none;
             width: 95%;
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 40px auto;
         }
 
-        .db-header {
-            background: var(--primary);
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), #0d1248);
             color: white;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
         }
 
-        .grid-stats {
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
         }
 
-        .card-section {
-            background: var(--white);
-            border-radius: 15px;
+        .card {
+            background: white;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--accent);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border-top: 4px solid var(--accent);
         }
 
-        .card-header {
-            font-size: 18px;
-            font-weight: bold;
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 800;
             color: var(--primary);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
         }
 
-        .data-row {
+        .row-data {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px dashed #f0f0f0;
+            border-bottom: 1px dashed #eee;
         }
-        .data-row:last-child { border: none; }
-        .label { color: #7f8c8d; font-size: 14px; }
-        .value { font-weight: 700; color: var(--primary); font-size: 18px; }
+        .row-data:last-child { border: none; }
+        .val { font-weight: 800; color: var(--primary); font-size: 20px; }
+        .lbl { color: #555; font-weight: 500; }
 
-        .badge {
-            background: #e8f0fe;
-            color: var(--primary);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+        .pyramid-section {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
         }
 
-        .pinnacle-box {
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            min-width: 180px;
-            margin: 5px;
+        .step-box {
             flex: 1;
-            background: #fff;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            min-width: 200px;
         }
+
+        .master-tag { font-size: 12px; color: var(--accent); display: block; }
     </style>
 </head>
 <body>
 
 <div id="auth-container">
     <div class="auth-header">
-        <h2>Map For Success</h2>
-        <p>Phân Tích Pythagoras Chính Xác</p>
+        <h2>MAP FOR SUCCESS</h2>
+        <p>Awaken a Prosperous Life</p>
     </div>
-    <div class="input-box">
-        <input type="text" id="nameInp" placeholder="Họ và tên đầy đủ">
-    </div>
-    <div class="input-box">
-        <input type="text" id="dobInp" placeholder="Ngày sinh (Ngày/Tháng/Năm)">
-    </div>
-    <button class="btn-login" onclick="handleAuth()">XEM KẾT QUẢ</button>
-    <p id="errorMsg" style="color: var(--danger); font-size: 14px; margin-top: 15px; min-height: 20px;"></p>
+    <input type="text" id="nameInp" placeholder="Họ và tên khai sinh">
+    <input type="text" id="dobInp" placeholder="Ngày sinh (Ngày/Tháng/Năm)">
+    <button class="btn-primary" onclick="generateMap()">MỞ KHÓA BẢN ĐỒ</button>
+    <p id="errorMsg" style="color: var(--danger); margin-top: 15px; font-weight: 500;"></p>
 </div>
 
 <div id="dashboard">
-    <div class="db-header">
+    <div class="header-banner">
         <div>
-            <h1 id="resName" style="margin: 0; font-size: 28px; text-transform: uppercase;">-</h1>
-            <p id="resMeta" style="margin: 5px 0 0; opacity: 0.8;">-</p>
+            <h1 id="resName" style="margin:0; letter-spacing: 1px;">-</h1>
+            <p id="resMeta" style="margin: 10px 0 0; opacity: 0.9; font-size: 1.1rem;"></p>
         </div>
-        <button onclick="location.reload()" style="background: var(--accent); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">TRA CỨU TIẾP</button>
+        <button onclick="location.reload()" style="background:var(--accent); border:none; padding:12px 25px; border-radius:10px; color:white; font-weight:700; cursor:pointer;">THOÁT</button>
     </div>
 
-    <div class="grid-stats">
-        <div class="card-section">
-            <div class="card-header">BỘ 3 QUYỀN LỰC <span class="badge">Core Numbers</span></div>
-            <div class="data-row"><span class="label">Chỉ số Đường đời</span><span class="value" id="v-lp">-</span></div>
-            <div class="data-row"><span class="label">Chỉ số Sứ mệnh</span><span class="value" id="v-sm">-</span></div>
-            <div class="data-row"><span class="label">Chỉ số Linh hồn</span><span class="value" id="v-lh">-</span></div>
-            <div class="data-row"><span class="label">Liên kết ĐĐ - SM</span><span class="value" id="v-lk">-</span></div>
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-title">TAM GIÁC VÀNG <span>Core</span></div>
+            <div class="row-data"><span class="lbl">Đường đời (Chủ đạo)</span><span class="val" id="v-lp">-</span></div>
+            <div class="row-data"><span class="lbl">Sứ mệnh (Mục đích)</span><span class="val" id="v-sm">-</span></div>
+            <div class="row-data"><span class="lbl">Linh hồn (Khao khát)</span><span class="val" id="v-lh">-</span></div>
+            <div class="row-data"><span class="lbl">Liên kết ĐĐ - SM</span><span class="val" id="v-lk">-</span></div>
         </div>
 
-        <div class="card-section">
-            <div class="card-header">KHẢ NĂNG BẨM SINH <span class="badge">Natural Ability</span></div>
-            <div class="data-row"><span class="label">Chỉ số Ngày sinh</span><span class="value" id="v-ns">-</span></div>
-            <div class="data-row"><span class="label">Chỉ số Nhân cách</span><span class="value" id="v-nc">-</span></div>
-            <div class="data-row"><span class="label">Sức mạnh Tiềm thức</span><span class="value" id="v-smtt">-</span></div>
-            <div class="data-row"><span class="label">Tư duy Lý trí</span><span class="value" id="v-tdlr">-</span></div>
+        <div class="card">
+            <div class="card-title">NĂNG LỰC BẨM SINH <span>Skills</span></div>
+            <div class="row-data"><span class="lbl">Ngày sinh (Năng khiếu)</span><span class="val" id="v-ns">-</span></div>
+            <div class="row-data"><span class="lbl">Nhân cách (Biểu hiện)</span><span class="val" id="v-nc">-</span></div>
+            <div class="row-data"><span class="lbl">Sức mạnh Tiềm thức</span><span class="val" id="v-smtt">-</span></div>
+            <div class="row-data"><span class="lbl">Thái độ (Phản ứng)</span><span class="val" id="v-td">-</span></div>
         </div>
 
-        <div class="card-section">
-            <div class="card-header">GIAI ĐOẠN PHÁT TRIỂN <span class="badge">Growth</span></div>
-            <div class="data-row"><span class="label">Chỉ số Thái độ</span><span class="value" id="v-td">-</span></div>
-            <div class="data-row"><span class="label">Chỉ số Trưởng thành</span><span class="value" id="v-tt">-</span></div>
-            <div class="data-row"><span class="label">Chỉ số Thiếu</span><span class="value" id="v-thieu">-</span></div>
-            <div class="data-row"><span class="label">Thách thức chủ đạo</span><span class="value" id="v-tc-main">-</span></div>
+        <div class="card">
+            <div class="card-title">TIỀM NĂNG & THÁCH THỨC <span>Growth</span></div>
+            <div class="row-data"><span class="lbl">Chỉ số Trưởng thành</span><span class="val" id="v-tt">-</span></div>
+            <div class="row-data"><span class="lbl">Tư duy Lý trí</span><span class="val" id="v-tdlr">-</span></div>
+            <div class="row-data"><span class="lbl">Chỉ số Thiếu (Nợ)</span><span class="val" id="v-thieu" style="color: var(--danger)">-</span></div>
+            <div class="row-data"><span class="lbl">Năm cá nhân (2026)</span><span class="val" id="v-py">-</span></div>
         </div>
 
-        <div class="card-section" style="grid-column: 1 / -1;">
-            <div class="card-header">BỐN ĐỈNH CAO & THÁCH THỨC CHẶNG <span class="badge">Pyramid of Success</span></div>
-            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center;">
-                <div class="pinnacle-box">
-                    <div style="color: var(--accent); font-size: 22px; font-weight: bold;">Đỉnh: <span id="p1">-</span></div>
-                    <div style="color: var(--danger); font-size: 16px; font-weight: bold;">T.Thức: <span id="c1">-</span></div>
-                    <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;" id="p1a">Chặng 1</div>
-                </div>
-                <div class="pinnacle-box">
-                    <div style="color: var(--accent); font-size: 22px; font-weight: bold;">Đỉnh: <span id="p2">-</span></div>
-                    <div style="color: var(--danger); font-size: 16px; font-weight: bold;">T.Thức: <span id="c2">-</span></div>
-                    <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;" id="p2a">Chặng 2</div>
-                </div>
-                <div class="pinnacle-box">
-                    <div style="color: var(--accent); font-size: 22px; font-weight: bold;">Đỉnh: <span id="p3">-</span></div>
-                    <div style="color: var(--danger); font-size: 16px; font-weight: bold;">T.Thức: <span id="c3">-</span></div>
-                    <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;" id="p3a">Chặng 3</div>
-                </div>
-                <div class="pinnacle-box">
-                    <div style="color: var(--accent); font-size: 22px; font-weight: bold;">Đỉnh: <span id="p4">-</span></div>
-                    <div style="color: var(--danger); font-size: 16px; font-weight: bold;">T.Thức: <span id="c4">-</span></div>
-                    <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;" id="p4a">Chặng 4</div>
-                </div>
+        <div class="pyramid-section">
+            <div class="step-box">
+                <div style="font-size:13px; color:#888" id="t1">Chặng 1</div>
+                <div style="font-size:28px; color:var(--accent); font-weight:800">Đỉnh: <span id="p1">-</span></div>
+                <div style="font-size:16px; color:var(--danger); font-weight:600">Thử thách: <span id="c1">-</span></div>
+            </div>
+            <div class="step-box">
+                <div style="font-size:13px; color:#888" id="t2">Chặng 2</div>
+                <div style="font-size:28px; color:var(--accent); font-weight:800">Đỉnh: <span id="p2">-</span></div>
+                <div style="font-size:16px; color:var(--danger); font-weight:600">Thử thách: <span id="c2">-</span></div>
+            </div>
+            <div class="step-box">
+                <div style="font-size:13px; color:#888" id="t3">Chặng 3</div>
+                <div style="font-size:28px; color:var(--accent); font-weight:800">Đỉnh: <span id="p3">-</span></div>
+                <div style="font-size:16px; color:var(--danger); font-weight:600">Thử thách: <span id="c3">-</span></div>
+            </div>
+            <div class="step-box">
+                <div style="font-size:13px; color:#888" id="t4">Chặng 4</div>
+                <div style="font-size:28px; color:var(--accent); font-weight:800">Đỉnh: <span id="p4">-</span></div>
+                <div style="font-size:16px; color:var(--danger); font-weight:600">Thử thách: <span id="c4">-</span></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const alphabetMap = {
-        'A':1,'J':1,'S':1, 'B':2,'K':2,'T':2, 'C':3,'L':3,'U':3,
-        'D':4,'M':4,'V':4, 'E':5,'N':5,'W':5, 'F':6,'O':6,'X':6,
-        'G':7,'P':7,'Y':7, 'H':8,'Q':8,'Z':8, 'I':9,'R':9
-    };
+    const alpha = {'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9};
 
-    const vowelsList = "AEIOUY";
+    // Hàm rút gọn chuẩn Pythagoras (có giữ Master Number)
+    function pyReduce(num, master = true) {
+        if (master && (num === 11 || num === 22 || num === 33)) return num;
+        if (num < 10) return num;
+        let s = String(num).split('').reduce((a, b) => a + parseInt(b), 0);
+        return pyReduce(s, master);
+    }
 
-    // Hàm rút gọn chuẩn Pythagoras
-    function sumReduce(n, isMaster = true) {
-        if (isMaster && (n === 11 || n === 22 || n === 33)) return n;
-        let sum = 0;
-        String(n).split('').forEach(d => sum += parseInt(d));
-        if (sum > 9) return sumReduce(sum, isMaster);
-        return sum;
+    // Hiển thị đẹp cho số Master (Ví dụ: 11/2)
+    function fmt(num) {
+        if (num === 11 || num === 22 || num === 33) return `${num}/${num.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)}`;
+        return num;
     }
 
     function removeTones(str) {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toUpperCase();
     }
 
-    function handleAuth() {
-        const nameRaw = document.getElementById('nameInp').value.trim();
-        const dobRaw = document.getElementById('dobInp').value.trim();
+    function generateMap() {
+        const rawName = document.getElementById('nameInp').value.trim();
+        const rawDob = document.getElementById('dobInp').value.trim();
         const error = document.getElementById('errorMsg');
 
-        if (!nameRaw || !dobRaw) {
-            error.innerText = "Hãy nhập đầy đủ dữ liệu!";
-            return;
-        }
+        if (!rawName || !rawDob) { error.innerText = "Vui lòng nhập đầy đủ thông tin!"; return; }
+        const dobParts = rawDob.split('/');
+        if (dobParts.length !== 3) { error.innerText = "Ngày sinh sai định dạng (DD/MM/YYYY)"; return; }
 
-        const parts = dobRaw.split('/');
-        if (parts.length !== 3) {
-            error.innerText = "Định dạng ngày sinh: DD/MM/YYYY";
-            return;
-        }
+        const D = parseInt(dobParts[0]), M = parseInt(dobParts[1]), Y = parseInt(dobParts[2]);
+        const cleanName = removeTones(rawName);
 
-        const d = parseInt(parts[0]), m = parseInt(parts[1]), y = parseInt(parts[2]);
-        const nameClean = removeTones(nameRaw);
+        // 1. ĐƯỜNG ĐỜI
+        const lp = pyReduce(pyReduce(D) + pyReduce(M) + pyReduce(Y));
 
-        // 1. Chỉ số Đường đời (Tính theo từng cụm độc lập rồi mới cộng lại)
-        const dR = sumReduce(d);
-        const mR = sumReduce(m);
-        const yR = sumReduce(y);
-        const lp = sumReduce(dR + mR + yR);
+        // 2. SỨ MỆNH & LINH HỒN (Xử lý chữ Y đặc biệt)
+        let smSum = 0, lhSum = 0, ncSum = 0;
+        let seen = new Set();
+        const vowels = "AEIOU";
 
-        // 2. Chỉ số Ngày sinh & Thái độ
-        const ns = sumReduce(d); 
-        const td = sumReduce(d + m);
+        const words = cleanName.split(/\s+/);
+        words.forEach(word => {
+            for (let i = 0; i < word.length; i++) {
+                let char = word[i];
+                let val = alpha[char];
+                if (!val) continue;
 
-        // 3. Sứ mệnh, Linh hồn, Nhân cách
-        let smTotal = 0, lhTotal = 0, ncTotal = 0;
-        let mapFound = new Set();
-        
-        nameClean.split(' ').forEach(word => {
-            word.split('').forEach(char => {
-                let val = alphabetMap[char];
-                if (val) {
-                    smTotal += val;
-                    mapFound.add(val);
-                    if (vowelsList.includes(char)) lhTotal += val; else ncTotal += val;
+                smSum += val;
+                seen.add(val);
+
+                let isVowel = vowels.includes(char);
+                // Logic chữ Y: Là nguyên âm nếu đứng giữa/cuối và không có nguyên âm nào khác bên cạnh
+                if (char === 'Y') {
+                    let hasOtherVowel = false;
+                    for(let c of word) if(vowels.includes(c)) hasOtherVowel = true;
+                    if (!hasOtherVowel) isVowel = true;
                 }
-            });
+
+                if (isVowel) lhSum += val; else ncSum += val;
+            }
         });
 
-        const sm = sumReduce(smTotal);
-        const lh = sumReduce(lhTotal);
-        const nc = sumReduce(ncTotal);
+        const sm = pyReduce(smSum);
+        const lh = pyReduce(lhSum);
+        const nc = pyReduce(ncSum);
+        const lk = Math.abs(pyReduce(lp, false) - pyReduce(sm, false));
 
-        // 4. Các chỉ số phụ
-        const lk = Math.abs(sumReduce(lp, false) - sumReduce(sm, false));
-        const tt = sumReduce(lp + sm); // Trưởng thành
-        
+        // 3. CÁC CHỈ SỐ PHỤ
+        const ns = pyReduce(D);
+        const td = pyReduce(D + M);
+        const tt = pyReduce(lp + sm);
+        const tdlr = pyReduce(words[words.length-1].length + D);
+
         let thieu = [];
-        for(let i=1; i<=9; i++) if(!mapFound.has(i)) thieu.push(i);
+        for(let i=1; i<=9; i++) if(!seen.has(i)) thieu.push(i);
         const smtt = 9 - thieu.length;
 
-        const lastName = nameClean.split(' ').pop();
-        const tdlr = sumReduce(lastName.length + d);
+        // Năm cá nhân 2026
+        const py = pyReduce(2026 + D + M);
 
-        // 5. Tính 4 đỉnh cao & 4 Thách thức
-        const d_final = sumReduce(d, false);
-        const m_final = sumReduce(m, false);
-        const y_final = sumReduce(y, false);
+        // 4. KIM TỰ THÁP
+        const dR = pyReduce(D, false), mR = pyReduce(M, false), yR = pyReduce(Y, false);
+        const p1 = pyReduce(dR + mR, false), p2 = pyReduce(dR + yR, false);
+        const p3 = pyReduce(p1 + p2, false), p4 = pyReduce(mR + yR, false);
 
-        const p1 = sumReduce(d_final + m_final, false);
-        const p2 = sumReduce(d_final + y_final, false);
-        const p3 = sumReduce(p1 + p2, false);
-        const p4 = sumReduce(m_final + y_final, false);
+        const c1 = Math.abs(dR - mR), c2 = Math.abs(dR - yR);
+        const c3 = Math.abs(c1 - c2), c4 = Math.abs(mR - yR);
 
-        const c1 = Math.abs(d_final - m_final);
-        const c2 = Math.abs(d_final - y_final);
-        const c3 = Math.abs(c1 - c2);
-        const c4 = Math.abs(m_final - y_final);
+        const age1 = 36 - pyReduce(lp, false);
 
-        const ageStart = 36 - sumReduce(lp, false);
-
-        // HIỂN THỊ
-        document.getElementById('resName').innerText = nameRaw;
-        document.getElementById('resMeta').innerText = `Sinh ngày: ${dobRaw} | Số chủ đạo: ${lp}`;
-        
-        document.getElementById('v-lp').innerText = lp;
-        document.getElementById('v-sm').innerText = sm;
-        document.getElementById('v-lh').innerText = lh;
+        // OUTPUT
+        document.getElementById('resName').innerText = rawName;
+        document.getElementById('resMeta').innerText = `Hành trình số ${lp} | Tầm nhìn Sứ mệnh ${sm}`;
+        document.getElementById('v-lp').innerText = fmt(lp);
+        document.getElementById('v-sm').innerText = fmt(sm);
+        document.getElementById('v-lh').innerText = fmt(lh);
         document.getElementById('v-lk').innerText = lk;
-        document.getElementById('v-ns').innerText = ns;
-        document.getElementById('v-nc').innerText = nc;
-        document.getElementById('v-smtt').innerText = smtt;
+        document.getElementById('v-ns').innerText = fmt(ns);
+        document.getElementById('v-nc').innerText = fmt(nc);
+        document.getElementById('v-smtt').innerText = smtt + "/9";
+        document.getElementById('v-td').innerText = fmt(td);
+        document.getElementById('v-tt').innerText = fmt(tt);
         document.getElementById('v-tdlr').innerText = tdlr;
-        document.getElementById('v-td').innerText = td;
-        document.getElementById('v-tt').innerText = tt;
-        document.getElementById('v-thieu').innerText = thieu.join(', ') || "Không có";
-        document.getElementById('v-tc-main').innerText = c3; // Thách thức chính là chặng 3
+        document.getElementById('v-thieu').innerText = thieu.join(', ') || "0";
+        document.getElementById('v-py').innerText = py;
 
         document.getElementById('p1').innerText = p1; document.getElementById('c1').innerText = c1;
         document.getElementById('p2').innerText = p2; document.getElementById('c2').innerText = c2;
         document.getElementById('p3').innerText = p3; document.getElementById('c3').innerText = c3;
         document.getElementById('p4').innerText = p4; document.getElementById('c4').innerText = c4;
 
-        document.getElementById('p1a').innerText = `Chặng 1 (đến ${ageStart}t)`;
-        document.getElementById('p2a').innerText = `Chặng 2 (${ageStart+1}-${ageStart+9}t)`;
-        document.getElementById('p3a').innerText = `Chặng 3 (${ageStart+10}-${ageStart+18}t)`;
-        document.getElementById('p4a').innerText = `Chặng 4 (${ageStart+19}t trở đi)`;
+        document.getElementById('t1').innerText = `Đến năm ${age1}t`;
+        document.getElementById('t2').innerText = `${age1+1} - ${age1+9}t`;
+        document.getElementById('t3').innerText = `${age1+10} - ${age1+18}t`;
+        document.getElementById('t4').innerText = `Trên ${age1+18}t`;
 
         document.getElementById('auth-container').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        document.body.style.alignItems = 'flex-start';
     }
 </script>
 </body>
