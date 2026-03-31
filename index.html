@@ -3,276 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Báo Cáo Thần Số Học Chuyên Sâu</title>
+    <title>Báo Cáo Thần Số Học - Better Life Academy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary-color: #800020; /* Đỏ đô / Burgundy */
-            --gold-color: #D4AF37;   /* Vàng Gold */
-            --bg-color: #fcfcfc;
-            --text-color: #333;
+            --primary-color: #800020; /* Đỏ đô Burgundy */
+            --gold-color: #B8860B;   /* Vàng Gold đậm cho bản in */
+            --bg-light: #fdfdfd;
+            --border-color: #e0e0e0;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f0f0;
             margin: 0; padding: 20px;
-            line-height: 1.6;
+            color: #333;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+
+        /* Giao diện nhập liệu */
+        .input-box {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
             background: #fff;
-            padding: 40px;
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-top: 6px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--primary-color);
         }
-        h1, h2, h3 { color: var(--primary-color); }
-        h1 { text-align: center; border-bottom: 2px solid var(--gold-color); padding-bottom: 10px; }
-        
-        .input-section {
-            background: #fdf8f5;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #eee;
-            margin-bottom: 30px;
-        }
+
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: var(--primary-color); }
         input {
             width: 100%; padding: 12px; border: 1px solid #ccc;
             border-radius: 6px; box-sizing: border-box; font-size: 16px;
         }
-        button {
-            width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary-color), #a00028);
-            color: white; border: none; border-radius: 6px; font-size: 18px;
-            font-weight: bold; cursor: pointer; text-transform: uppercase;
-            box-shadow: 0 4px 6px rgba(128, 0, 32, 0.3);
-            transition: 0.3s;
-        }
-        button:hover { background: var(--primary-color); transform: translateY(-2px); }
 
-        /* Bố cục Báo cáo */
-        #reportSection { display: none; }
-        .report-header { text-align: center; margin-bottom: 30px; }
-        .report-header h2 { color: var(--gold-color); font-size: 28px; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card {
-            background: #fff; border: 1px solid #eaeaea;
-            padding: 20px; border-radius: 8px;
-            border-left: 4px solid var(--gold-color);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        button {
+            width: 100%; padding: 15px; border: none; border-radius: 6px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
         }
-        .card-title { font-size: 18px; font-weight: bold; color: var(--primary-color); margin-bottom: 10px; }
-        .card-number { font-size: 32px; font-weight: bold; color: var(--gold-color); display: block; margin-bottom: 10px; }
-        .card-content { font-size: 15px; color: #555; }
-        
+
+        .btn-generate { background: var(--primary-color); color: white; }
+        .btn-pdf { background: var(--gold-color); color: white; margin-top: 20px; display: none;}
+
+        /* Bố cục Báo cáo PDF */
+        #report-content {
+            max-width: 900px; margin: 0 auto; background: #fff;
+            padding: 40px; border-radius: 0; display: none;
+        }
+
+        .report-header {
+            text-align: center; border-bottom: 3px double var(--gold-color);
+            padding-bottom: 20px; margin-bottom: 30px;
+        }
+
+        .report-header h1 { color: var(--primary-color); margin: 0; font-size: 28px; }
+        .report-header p { font-style: italic; color: #666; margin: 5px 0; }
+
         .section-title {
             background: var(--primary-color); color: white;
-            padding: 10px 20px; border-radius: 6px; margin: 40px 0 20px 0;
+            padding: 10px 15px; border-radius: 4px; margin: 30px 0 15px 0;
+            font-size: 18px; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+        .grid-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+
+        .card {
+            border: 1px solid var(--border-color); padding: 15px;
+            border-left: 5px solid var(--gold-color); background: #fff;
+        }
+
+        .card-title { font-weight: bold; color: var(--primary-color); font-size: 14px; margin-bottom: 5px; }
+        .card-value { font-size: 24px; font-weight: bold; color: var(--gold-color); }
+
+        /* Biểu đồ 3x3 */
+        .chart-section { display: flex; gap: 30px; align-items: flex-start; margin-top: 20px; }
+        .grid-3x3 {
+            display: grid; grid-template-columns: repeat(3, 70px); grid-template-rows: repeat(3, 70px);
+            gap: 5px; background: var(--primary-color); border: 3px solid var(--primary-color);
+        }
+        .cell {
+            background: #fff; display: flex; align-items: center;
+            justify-content: center; font-size: 22px; font-weight: bold; color: #333;
+        }
+
+        .arrows-list { flex: 1; font-size: 14px; }
+        .arrow-item { margin-bottom: 8px; padding: 5px; border-bottom: 1px dashed #ddd; }
+        .strength { color: #27ae60; font-weight: bold; }
+        .empty { color: #c0392b; font-weight: bold; }
+
+        /* Đỉnh cao cuộc đời */
+        .pinnacle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
+        .pinnacle-item { background: #fdf8f5; border: 1px solid var(--gold-color); padding: 10px; border-radius: 8px; }
+        .p-age { font-size: 12px; color: #666; }
+        .p-val { font-size: 20px; font-weight: bold; color: var(--primary-color); }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .input-box, .btn-pdf { display: none; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>BÁO CÁO THẦN SỐ HỌC CHUYÊN SÂU</h1>
-    
-    <div class="input-section">
-        <div class="form-group">
-            <label for="fullName">Họ và tên khai sinh:</label>
-            <input type="text" id="fullName" placeholder="Nhập đầy đủ họ tên (VD: NGUYỄN VĂN A)">
-        </div>
-        <div class="form-group">
-            <label for="dob">Ngày tháng năm sinh (Dương lịch):</label>
-            <input type="date" id="dob">
-        </div>
-        <button onclick="generateReport()">Kích Hoạt Báo Cáo</button>
+<div class="input-box">
+    <h2 style="text-align: center; color: var(--primary-color);">HỆ THỐNG TRA CỨU THẦN SỐ HỌC</h2>
+    <div class="form-group">
+        <label>Họ và Tên (Khai sinh):</label>
+        <input type="text" id="userName" placeholder="VD: NGUYEN VAN AN">
+    </div>
+    <div class="form-group">
+        <label>Ngày Tháng Năm Sinh (Dương lịch):</label>
+        <input type="date" id="userDob">
+    </div>
+    <button class="btn-generate" onclick="generateReport()">Kích Hoạt Báo Cáo</button>
+</div>
+
+<div id="report-content">
+    <div class="report-header">
+        <h1>BÁO CÁO PHÂN TÍCH THẾ TRẬN CUỘC ĐỜI</h1>
+        <p>Better Life Academy - Đánh Thức Cuộc Đời Thịnh Vượng</p>
+        <h3 style="margin-top: 15px;">Chủ nhân: <span id="outName" style="color: var(--gold-color);">...</span></h3>
+        <p>Ngày sinh: <span id="outDob">...</span></p>
     </div>
 
-    <div id="reportSection">
-        <div class="report-header">
-            <h2>HỒ SƠ CÁ NHÂN</h2>
-            <p>Họ tên: <strong id="outName"></strong> | Ngày sinh: <strong id="outDob"></strong></p>
+    <div class="section-title">I. Biểu Đồ Ngày Sinh & Thế Trận Mũi Tên</div>
+    <div class="chart-section">
+        <div class="grid-3x3">
+            <div class="cell" id="c3"></div><div class="cell" id="c6"></div><div class="cell" id="c9"></div>
+            <div class="cell" id="c2"></div><div class="cell" id="c5"></div><div class="cell" id="c8"></div>
+            <div class="cell" id="c1"></div><div class="cell" id="c4"></div><div class="cell" id="c7"></div>
         </div>
+        <div class="arrows-list" id="arrowResults">
+            </div>
+    </div>
 
-        <h3 class="section-title">I. BỘ CHỈ SỐ CỐT LÕI</h3>
-        <div class="grid-2">
-            <div class="card">
-                <div class="card-title">1. Số Chủ Đạo (Life Path)</div>
-                <span class="card-number" id="numLifePath">-</span>
-                <div class="card-content">Đây là con số quan trọng nhất, đại diện cho con đường bạn sẽ đi trong kiếp sống này, những bài học bạn cần học và tài năng thiên bẩm của bạn... <br><i>(Bạn có thể viết thêm diễn giải chi tiết cho số này ở đây trong code)</i></div>
-            </div>
-            <div class="card">
-                <div class="card-title">2. Số Sứ Mệnh (Destiny)</div>
-                <span class="card-number" id="numDestiny">-</span>
-                <div class="card-content">Đại diện cho vai trò, mục đích sống và những gì bạn cần đạt được để cảm thấy trọn vẹn...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">3. Số Linh Hồn (Soul Urge)</div>
-                <span class="card-number" id="numSoul">-</span>
-                <div class="card-content">Khao khát ẩn sâu bên trong, điều thực sự khiến trái tim bạn hạnh phúc...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">4. Số Nhân Cách (Personality)</div>
-                <span class="card-number" id="numPersonality">-</span>
-                <div class="card-content">Cách người khác nhìn nhận về bạn trong những lần tiếp xúc đầu tiên...</div>
-            </div>
-        </div>
+    <div class="section-title">II. Bộ Chỉ Số Năng Lực Cốt Lõi</div>
+    <div class="grid-container">
+        <div class="card"><div class="card-title">SỐ CHỦ ĐẠO (LIFE PATH)</div><div class="card-value" id="resLP">-</div></div>
+        <div class="card"><div class="card-title">SỐ SỨ MỆNH (DESTINY)</div><div class="card-value" id="resDestiny">-</div></div>
+        <div class="card"><div class="card-title">SỐ LINH HỒN (SOUL URGE)</div><div class="card-value" id="resSoul">-</div></div>
+        <div class="card"><div class="card-title">SỐ NHÂN CÁCH (PERSONALITY)</div><div class="card-value" id="resPers">-</div></div>
+        <div class="card"><div class="card-title">SỐ TRƯỞNG THÀNH (MATURITY)</div><div class="card-value" id="resMat">-</div></div>
+        <div class="card"><div class="card-title">NĂM CÁ NHÂN (PERSONAL YEAR)</div><div class="card-value" id="resYear">-</div></div>
+    </div>
 
-        <h3 class="section-title">II. BỘ CHỈ SỐ BỔ TRỢ</h3>
-        <div class="grid-2">
-            <div class="card">
-                <div class="card-title">5. Số Ngày Sinh (Birthday)</div>
-                <span class="card-number" id="numBirthday">-</span>
-                <div class="card-content">Năng lực đặc biệt bạn được ban tặng ngay khi chào đời...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">6. Số Thái Độ (Attitude)</div>
-                <span class="card-number" id="numAttitude">-</span>
-                <div class="card-content">Cách bạn phản ứng với các tình huống và khó khăn trong cuộc sống...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">7. Số Trưởng Thành (Maturity)</div>
-                <span class="card-number" id="numMaturity">-</span>
-                <div class="card-content">Sức mạnh tiềm ẩn sẽ bộc lộ mạnh mẽ nhất từ sau độ tuổi 35-40...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">8. Số Thiếu (Missing Numbers)</div>
-                <span class="card-number" id="numMissing" style="font-size:24px;">-</span>
-                <div class="card-content">Những năng lượng bạn cần bồi đắp và rèn luyện trong kiếp sống này...</div>
-            </div>
-        </div>
+    <div class="section-title">III. 4 ĐỈNH CAO THÀNH CÔNG (PINNACLES)</div>
+    <div class="pinnacle-grid">
+        <div class="pinnacle-item"><div class="p-age">Đỉnh 1 (Tuổi: <span id="age1"></span>)</div><div class="p-val" id="p1">-</div></div>
+        <div class="pinnacle-item"><div class="p-age">Đỉnh 2 (Tuổi: <span id="age2"></span>)</div><div class="p-val" id="p2">-</div></div>
+        <div class="pinnacle-item"><div class="p-age">Đỉnh 3 (Tuổi: <span id="age3"></span>)</div><div class="p-val" id="p3">-</div></div>
+        <div class="pinnacle-item"><div class="p-age">Đỉnh 4 (Tuổi: <span id="age4"></span>)</div><div class="p-val" id="p4">-</div></div>
+    </div>
 
-        <h3 class="section-title">III. DỰ BÁO TƯƠNG LAI & CHIẾN LƯỢC</h3>
-        <div class="grid-2">
-            <div class="card">
-                <div class="card-title">Năm Cá Nhân Hiện Tại</div>
-                <span class="card-number" id="numPersonalYear">-</span>
-                <div class="card-content">Năng lượng của năm nay. Tập trung vào điều gì để thuận lợi nhất...</div>
-            </div>
-            <div class="card">
-                <div class="card-title">Định Hướng Nghề Nghiệp</div>
-                <div class="card-content">Dựa trên sự kết hợp giữa Số Chủ Đạo và Số Sứ Mệnh, các nhóm ngành phù hợp với bạn bao gồm... <br><i>(Cần tích hợp bộ Data text nghề nghiệp)</i></div>
-            </div>
-        </div>
-        
-        <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-radius: 8px; color: #856404;">
-            <strong>Lưu ý dành cho Nhà phát triển:</strong> Trong bản khung này đã bao gồm 10 chỉ số quan trọng nhất. 20 chỉ số còn lại (Biểu đồ ngày sinh, 4 Đỉnh cao, Thử thách, Sức khỏe, Lộ trình 10 năm...) sử dụng chung cấu trúc thẻ HTML như trên. Bạn chỉ cần copy/paste thẻ <code>&lt;div class="card"&gt;</code> để mở rộng báo cáo.
-        </div>
-
+    <div style="margin-top: 40px; border-top: 1px solid var(--gold-color); padding-top: 10px; font-size: 12px; text-align: center; color: #888;">
+        © 2026 Better Life Academy | "Awaken a Prosperous Life" Training Series
     </div>
 </div>
 
+<div style="max-width: 900px; margin: 0 auto; text-align: center;">
+    <button class="btn-pdf" id="btnPdf" onclick="exportPDF()">Tải Báo Cáo PDF Sang Trọng</button>
+</div>
+
 <script>
-    const pythagoras = {'A':1,'B':2,'C':3,'D':4,'E':5,'F':6,'G':7,'H':8,'I':9,'J':1,'K':2,'L':3,'M':4,'N':5,'O':6,'P':7,'Q':8,'R':9,'S':1,'T':2,'U':3,'V':4,'W':5,'X':6,'Y':7,'Z':8};
-    const vowelsList = ['A', 'E', 'I', 'O', 'U', 'Y']; // Y quy ước tạm là nguyên âm để đơn giản hóa
+    const pythagoras = {'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9};
+    const vowels = ['A', 'E', 'I', 'O', 'U', 'Y'];
 
-    function removeVietnameseTones(str) {
-        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
-    }
-
-    function reduceNum(num) {
+    function reduce(num) {
         if (num === 11 || num === 22 || num === 33) return num;
         while (num > 9) {
+            num = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
             if (num === 11 || num === 22 || num === 33) break;
-            num = num.toString().split('').map(Number).reduce((a, b) => a + b, 0);
         }
         return num;
     }
 
-    function calculateCoreNumbers(name, dobStr) {
-        let cleanName = removeVietnameseTones(name).toUpperCase().replace(/[^A-Z]/g, '');
-        let dobParts = dobStr.split('-'); // [YYYY, MM, DD]
-        let day = parseInt(dobParts[2]), month = parseInt(dobParts[1]), year = parseInt(dobParts[0]);
-
-        // 1. Life Path (Chủ đạo)
-        let lpDay = reduceNum(day), lpMonth = reduceNum(month), lpYear = reduceNum(year);
-        let lifePath = reduceNum(lpDay + lpMonth + lpYear);
-
-        // 2, 3, 4. Destiny, Soul, Personality
-        let destinySum = 0, soulSum = 0, personalitySum = 0;
-        let presentNumbers = new Set(); // Để tính số thiếu
-
-        for (let char of cleanName) {
-            let val = pythagoras[char];
-            if (val) {
-                destinySum += val;
-                presentNumbers.add(val);
-                if (vowelsList.includes(char)) soulSum += val;
-                else personalitySum += val;
-            }
-        }
-        
-        let destiny = reduceNum(destinySum);
-        let soul = reduceNum(soulSum);
-        let personality = reduceNum(personalitySum);
-
-        // 5. Birthday
-        let birthday = reduceNum(day);
-
-        // 6. Attitude (Thái độ = Ngày + Tháng)
-        let attitude = reduceNum(day + month);
-
-        // 7. Maturity (Trưởng thành = Chủ đạo + Sứ mệnh)
-        let maturity = reduceNum(lifePath + destiny);
-
-        // 8. Missing Numbers (Số thiếu)
-        let allNumbers = [1,2,3,4,5,6,7,8,9];
-        let missingNumbers = allNumbers.filter(n => !presentNumbers.has(n));
-
-        // 9. Personal Year (Năm cá nhân = Năm hiện tại + Tháng sinh + Ngày sinh)
-        let currentYear = new Date().getFullYear();
-        let personalYear = reduceNum(reduceNum(currentYear) + lpMonth + lpDay);
-
-        return { lifePath, destiny, soul, personality, birthday, attitude, maturity, missing: missingNumbers.join(', ') || 'Không thiếu', personalYear };
+    function checkArrows(counts) {
+        const lines = [
+            {n: "1-4-7 (Thực tế)", c: [1,4,7]}, {n: "2-5-8 (Cảm xúc)", c: [2,5,8]}, {n: "3-6-9 (Trí tuệ)", c: [3,6,9]},
+            {n: "1-2-3 (Kế hoạch)", c: [1,2,3]}, {n: "4-5-6 (Ý chí)", c: [4,5,6]}, {n: "7-8-9 (Hoạt động)", c: [7,8,9]},
+            {n: "1-5-9 (Quyết tâm)", c: [1,5,9]}, {n: "3-5-7 (Tâm linh)", c: [3,5,7]}
+        ];
+        let html = "";
+        lines.forEach(l => {
+            let hasAll = l.c.every(num => counts[num] > 0);
+            let hasNone = l.c.every(num => counts[num] === 0);
+            if (hasAll) html += `<div class="arrow-item strength">✔ Mũi tên Sức mạnh ${l.n}</div>`;
+            if (hasNone) html += `<div class="arrow-item empty">✖ Mũi tên Trống ${l.n}</div>`;
+        });
+        return html || "Không có mũi tên đặc biệt.";
     }
 
     function generateReport() {
-        let name = document.getElementById('fullName').value;
-        let dob = document.getElementById('dob').value;
+        const name = document.getElementById('userName').value.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/Đ/g, "D");
+        const dob = document.getElementById('userDob').value;
+        if (!name || !dob) return alert("Vui lòng nhập đầy đủ thông tin!");
 
-        if (!name || !dob) { alert("Vui lòng nhập đủ thông tin!"); return; }
-
-        let data = calculateCoreNumbers(name, dob);
-// Tính 4 Đỉnh cao
-let p1 = reduceNum(lpDay + lpMonth);
-let p2 = reduceNum(lpDay + lpYear);
-let p3 = reduceNum(p1 + p2);
-let p4 = reduceNum(lpMonth + lpYear);
-
-// Tính tuổi đạt đỉnh
-let ageP1 = 36 - lifePath;
-let ageP2 = ageP1 + 9;
-let ageP3 = ageP2 + 9;
-let ageP4 = ageP3 + 9;
-
-return { ..., p1, p2, p3, p4, ageP1, ageP2, ageP3, ageP4 };
-        // In ra màn hình
-        document.getElementById('outName').innerText = name.toUpperCase();
+        const [y, m, d] = dob.split('-').map(Number);
         
-        // Chuyển format YYYY-MM-DD sang DD/MM/YYYY
-        let dobArr = dob.split('-');
-        document.getElementById('outDob').innerText = `${dobArr[2]}/${dobArr[1]}/${dobArr[0]}`;
+        // 1. Số chủ đạo
+        let lp = reduce(reduce(d) + reduce(m) + reduce(y));
+        if (lp === 22) lp = "22/4";
 
-        document.getElementById('numLifePath').innerText = data.lifePath;
-        document.getElementById('numDestiny').innerText = data.destiny;
-        document.getElementById('numSoul').innerText = data.soul;
-        document.getElementById('numPersonality').innerText = data.personality;
-        document.getElementById('numBirthday').innerText = data.birthday;
-        document.getElementById('numAttitude').innerText = data.attitude;
-        document.getElementById('numMaturity').innerText = data.maturity;
-        document.getElementById('numMissing').innerText = data.missing;
-        document.getElementById('numPersonalYear').innerText = data.personalYear;
+        // 2. Tên (Sứ mệnh, Linh hồn, Nhân cách)
+        let sm = 0, lh = 0, nc = 0;
+        const cleanName = name.replace(/\s/g, '');
+        for (let char of cleanName) {
+            let val = pythagoras[char] || 0;
+            sm += val;
+            if (vowels.includes(char)) lh += val; else nc += val;
+        }
 
-        // Hiển thị báo cáo
-        document.getElementById('reportSection').style.display = 'block';
+        // 3. Biểu đồ 3x3
+        let counts = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
+        const dobStr = d.toString() + m.toString() + y.toString();
+        for(let s of dobStr) if(s!=='0') { counts[s]++; document.getElementById('c'+s).innerText += s; }
+
+        // 4. Đỉnh cao
+        let lpVal = parseInt(lp);
+        let p1 = reduce(reduce(d) + reduce(m));
+        let p2 = reduce(reduce(d) + reduce(y));
+        let p3 = reduce(p1 + p2);
+        let p4 = reduce(reduce(m) + reduce(y));
+
+        // Hiển thị dữ liệu
+        document.getElementById('outName').innerText = document.getElementById('userName').value.toUpperCase();
+        document.getElementById('outDob').innerText = `${d}/${m}/${y}`;
+        document.getElementById('resLP').innerText = lp;
+        document.getElementById('resDestiny').innerText = reduce(sm);
+        document.getElementById('resSoul').innerText = reduce(lh);
+        document.getElementById('resPers').innerText = reduce(nc);
+        document.getElementById('resMat').innerText = reduce(parseInt(lp) + reduce(sm));
+        document.getElementById('resYear').innerText = reduce(new Date().getFullYear() + m + d);
         
-        // Cuộn xuống báo cáo
-        document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('p1').innerText = p1; document.getElementById('age1').innerText = 36 - lpVal;
+        document.getElementById('p2').innerText = p2; document.getElementById('age2').innerText = (36 - lpVal) + 9;
+        document.getElementById('p3').innerText = p3; document.getElementById('age3').innerText = (36 - lpVal) + 18;
+        document.getElementById('p4').innerText = p4; document.getElementById('age4').innerText = (36 - lpVal) + 27;
+
+        document.getElementById('arrowResults').innerHTML = checkArrows(counts);
+        
+        document.getElementById('report-content').style.display = 'block';
+        document.getElementById('btnPdf').style.display = 'inline-block';
+        window.scrollTo(0, document.getElementById('report-content').offsetTop);
+    }
+
+    function exportPDF() {
+        const element = document.getElementById('report-content');
+        const name = document.getElementById('outName').innerText;
+        html2pdf().set({
+            margin: 0.5,
+            filename: `Bao-Cao-Than-So-${name}.pdf`,
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        }).from(element).save();
     }
 </script>
 
