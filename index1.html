@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Trị Map For Success - Nguyễn Hiền Hoà</title>
+    <title>Hệ Thống Quản Trị Map For Success - Toàn Cầu</title>
     <style>
         :root {
             --primary: #1a237e; /* Xanh Navy truyền thống */
@@ -25,7 +25,6 @@
             transition: all 0.5s ease;
         }
 
-        /* Khung Đăng Nhập */
         #auth-container {
             background: var(--white);
             padding: 40px;
@@ -67,7 +66,6 @@
         }
         .btn-login:hover { background: #000051; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        /* Màn Hình Dashboard Chi Tiết */
         #dashboard {
             display: none;
             width: 95%;
@@ -138,70 +136,68 @@
 <div id="auth-container">
     <div class="auth-header">
         <h2>Map For Success</h2>
-        <p>Hệ Thống Quản Trị Chỉ Số Cá Nhân</p>
+        <p>Hệ Thống Phân Tích Chỉ Số Tự Động</p>
     </div>
     <div class="input-box">
-        <input type="text" id="nameInp" placeholder="Họ và tên (In hoa có dấu)">
+        <input type="text" id="nameInp" placeholder="Họ và tên (Có dấu hoặc không)">
     </div>
     <div class="input-box">
         <input type="text" id="dobInp" placeholder="Ngày sinh (Ngày/Tháng/Năm)">
     </div>
-    <button class="btn-login" onclick="handleAuth()">MỞ KHÓA BẢN ĐỒ</button>
+    <button class="btn-login" onclick="handleAuth()">XEM BẢN ĐỒ CỦA TÔI</button>
     <p id="errorMsg" style="color: #e74c3c; font-size: 14px; margin-top: 15px; min-height: 20px;"></p>
 </div>
 
 <div id="dashboard">
     <div class="db-header">
         <div>
-            <h1 style="margin: 0; font-size: 28px;">NGUYỄN HIỀN HOÀ</h1>
-            <p style="margin: 5px 0 0; opacity: 0.8;">Ngày sinh: 08/11/1984 | Đường đời số 5</p>
+            <h1 id="resName" style="margin: 0; font-size: 28px; text-transform: uppercase;">-</h1>
+            <p id="resMeta" style="margin: 5px 0 0; opacity: 0.8;">-</p>
         </div>
-        <button onclick="location.reload()" style="background: var(--accent); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">ĐĂNG XUẤT</button>
+        <button onclick="location.reload()" style="background: var(--accent); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">TRA CỨU MỚI</button>
     </div>
 
     <div class="grid-stats">
         <div class="card-section">
             <div class="card-header">TAM GIÁC VÀNG <span class="badge">Năng Lượng Cốt Lõi</span></div>
-            <div class="data-row"><span class="label">Chỉ số Đường đời</span><span class="value">5</span></div>
-            <div class="data-row"><span class="label">Chỉ số Sứ mệnh</span><span class="value">2</span></div>
-            <div class="data-row"><span class="label">Chỉ số Linh hồn</span><span class="value">2</span></div>
-            <div class="data-row"><span class="label">Liên kết Đường đời - Sứ mệnh</span><span class="value">3</span></div>
+            <div class="data-row"><span class="label">Chỉ số Đường đời</span><span class="value" id="v-lp">-</span></div>
+            <div class="data-row"><span class="label">Chỉ số Sứ mệnh</span><span class="value" id="v-sm">-</span></div>
+            <div class="data-row"><span class="label">Chỉ số Linh hồn</span><span class="value" id="v-lh">-</span></div>
+            <div class="data-row"><span class="label">Liên kết Đường đời - Sứ mệnh</span><span class="value" id="v-lk">-</span></div>
         </div>
 
         <div class="card-section">
-            <div class="card-header">CÔNG CỤ THÀNH CÔNG <span class="badge">Năng Lực & Thái Độ</span></div>
-            <div class="data-row"><span class="label">Chỉ số Ngày sinh</span><span class="value">8</span></div>
-            <div class="data-row"><span class="label">Chỉ số Thái độ</span><span class="value">1</span></div>
-            <div class="data-row"><span class="label">Chỉ số Trưởng thành</span><span class="value">7</span></div>
-            <div class="data-row"><span class="label">Chỉ số Nhân cách</span><span class="value">9</span></div>
+            <div class="card-header">CÔNG CỤ THÀNH CÔNG <span class="badge">Năng Lực</span></div>
+            <div class="data-row"><span class="label">Chỉ số Ngày sinh</span><span class="value" id="v-ns">-</span></div>
+            <div class="data-row"><span class="label">Chỉ số Thái độ</span><span class="value" id="v-td">-</span></div>
+            <div class="data-row"><span class="label">Chỉ số Trưởng thành</span><span class="value" id="v-tt">-</span></div>
+            <div class="data-row"><span class="label">Chỉ số Nhân cách</span><span class="value" id="v-nc">-</span></div>
         </div>
 
         <div class="card-section">
             <div class="card-header">BÀI HỌC CẢI THIỆN <span class="badge">Thách Thức</span></div>
-            <div class="data-row"><span class="label">Chỉ số Thiếu</span><span class="value">2, 4</span></div>
-            <div class="data-row"><span class="label">Chỉ số Thách thức</span><span class="value">6, 4, 2, 2</span></div>
-            <div class="data-row"><span class="label">Sức mạnh Tiềm thức</span><span class="value">7</span></div>
-            <div class="data-row"><span class="label">Tư duy Lý trí</span><span class="value">5</span></div>
+            <div class="data-row"><span class="label">Chỉ số Thiếu</span><span class="value" id="v-thieu">-</span></div>
+            <div class="data-row"><span class="label">Tư duy Lý trí</span><span class="value" id="v-tdlr">-</span></div>
         </div>
 
         <div class="card-section" style="grid-column: 1 / -1;">
             <div class="card-header">4 ĐỈNH CAO CUỘC ĐỜI <span class="badge">Pinnacles</span></div>
             <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center;">
                 <div style="padding: 15px;">
-                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;">1</div>
-                    <div style="font-size: 13px; color: #7f8c8d;">Chặng 1 (0-31t)</div>
+                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;" id="p1">-</div>
+                    <div style="font-size: 11px; color: #7f8c8d;" id="p1a">Chặng 1</div>
                 </div>
                 <div style="padding: 15px;">
-                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;">3</div>
-                    <div style="font-size: 13px; color: #7f8c8d;">Chặng 2 (32-40t)</div>
+                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;" id="p2">-</div>
+                    <div style="font-size: 11px; color: #7f8c8d;" id="p2a">Chặng 2</div>
                 </div>
                 <div style="padding: 15px;">
-                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;">4</div>
-                    <div style="font-size: 13px; color: #7f8c8d;">Chặng 3 (41-49t)</div>
+                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;" id="p3">-</div>
+                    <div style="font-size: 11px; color: #7f8c8d;" id="p3a">Chặng 3</div>
                 </div>
                 <div style="padding: 15px;">
-                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;">6</div>
-                    <div style="font-size: 13px; color: #7f8c8d;">Chặng 4 (50t+)</div>
+                    <div style="color: var(--accent); font-size: 24px; font-weight: bold;" id="p4">-</div>
+                    <div style="font-size: 11px; color: #7f8c8d;" id="p4a">Chặng 4</div>
                 </div>
             </div>
         </div>
@@ -209,31 +205,109 @@
 </div>
 
 <script>
-    function handleAuth() {
-        const name = document.getElementById('nameInp').value.trim().toUpperCase();
-        const dob = document.getElementById('dobInp').value.trim();
-        const error = document.getElementById('errorMsg');
+    const alphabetMap = {
+        'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,
+        'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9
+    };
 
-        // Thông tin xác thực chuẩn
-        const AUTH_NAME = "NGUYỄN HIỀN HOÀ";
-        const AUTH_DOB = "08/11/1984";
-
-        if (name === AUTH_NAME && dob === AUTH_DOB) {
-            error.innerText = "";
-            document.getElementById('auth-container').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.body.style.alignItems = 'flex-start';
-            document.body.style.background = "#f0f2f5";
-        } else {
-            error.innerText = "Thông tin không khớp với bản đồ thành công!";
+    function reduceNum(n, master = true) {
+        if (master && (n === 11 || n === 22 || n === 33)) return n;
+        while (n > 9) {
+            n = n.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+            if (master && (n === 11 || n === 22 || n === 33)) break;
         }
+        return n;
     }
 
-    // Lắng nghe phím Enter
-    document.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') handleAuth();
-    });
-</script>
+    function removeVietnameseTones(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toUpperCase();
+    }
 
+    function handleAuth() {
+        const nameRaw = document.getElementById('nameInp').value.trim();
+        const dobRaw = document.getElementById('dobInp').value.trim();
+        const error = document.getElementById('errorMsg');
+
+        if (!nameRaw || !dobRaw) {
+            error.innerText = "Vui lòng nhập đủ Họ tên và Ngày sinh!";
+            return;
+        }
+
+        const dateParts = dobRaw.split('/');
+        if (dateParts.length !== 3) {
+            error.innerText = "Ngày sinh sai định dạng (Ngày/Tháng/Năm)";
+            return;
+        }
+
+        const d = parseInt(dateParts[0]), m = parseInt(dateParts[1]), y = parseInt(dateParts[2]);
+        const nameClean = removeVietnameseTones(nameRaw);
+
+        // TÍNH TOÁN
+        const lp = reduceNum(reduceNum(d) + reduceNum(m) + reduceNum(y));
+        const ns = reduceNum(d);
+        const td = reduceNum(d + m);
+
+        let smTotal = 0, lhTotal = 0, ncTotal = 0;
+        const vowels = "AEIOUY";
+        const chars = nameClean.replace(/\s/g, '').split('');
+        let foundNums = new Set();
+
+        chars.forEach(c => {
+            let val = alphabetMap[c];
+            if (val) {
+                smTotal += val;
+                foundNums.add(val);
+                if (vowels.includes(c)) lhTotal += val; else ncTotal += val;
+            }
+        });
+
+        const sm = reduceNum(smTotal);
+        const lh = reduceNum(lhTotal);
+        const nc = reduceNum(ncTotal);
+        const lk = Math.abs(lp - sm);
+        const tt = reduceNum(lp + sm);
+        
+        let thieu = [];
+        for(let i=1; i<=9; i++) if(!foundNums.has(i)) thieu.push(i);
+
+        // Đỉnh cao (Pinnacles)
+        const dr = reduceNum(d, false), mr = reduceNum(m, false), yr = reduceNum(y, false);
+        const p1 = reduceNum(dr + mr, false);
+        const p2 = reduceNum(dr + yr, false);
+        const p3 = reduceNum(p1 + p2, false);
+        const p4 = reduceNum(mr + yr, false);
+        const age1 = 36 - reduceNum(lp, false);
+
+        // HIỂN THỊ
+        document.getElementById('resName').innerText = nameRaw;
+        document.getElementById('resMeta').innerText = `Ngày sinh: ${dobRaw} | Đường đời số ${lp}`;
+        document.getElementById('v-lp').innerText = lp;
+        document.getElementById('v-sm').innerText = sm;
+        document.getElementById('v-lh').innerText = lh;
+        document.getElementById('v-lk').innerText = lk;
+        document.getElementById('v-ns').innerText = ns;
+        document.getElementById('v-td').innerText = td;
+        document.getElementById('v-tt').innerText = tt;
+        document.getElementById('v-nc').innerText = nc;
+        document.getElementById('v-thieu').innerText = thieu.join(', ') || "0";
+        document.getElementById('v-tdlr').innerText = reduceNum(nameClean.split(' ').pop().length + d);
+
+        document.getElementById('p1').innerText = p1;
+        document.getElementById('p2').innerText = p2;
+        document.getElementById('p3').innerText = p3;
+        document.getElementById('p4').innerText = p4;
+        document.getElementById('p1a').innerText = `Chặng 1 (0-${age1}t)`;
+        document.getElementById('p2a').innerText = `Chặng 2 (${age1+1}-${age1+9}t)`;
+        document.getElementById('p3a').innerText = `Chặng 3 (${age1+10}-${age1+18}t)`;
+        document.getElementById('p4a').innerText = `Chặng 4 (${age1+19}t+)`;
+
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.body.style.alignItems = 'flex-start';
+        document.body.style.background = "#f0f2f5";
+    }
+
+    document.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAuth(); });
+</script>
 </body>
 </html>
