@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu Thần Số Học Pythagoras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+            display: none;
+        }
+        .result-item {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #c0392b;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Thần Số Học Pythagoras</h2>
+    
+    <div class="form-group">
+        <label for="fullName">Họ và tên (Có dấu hoặc không dấu):</label>
+        <input type="text" id="fullName" placeholder="VD: Nguyen Van A">
+    </div>
+
+    <div class="form-group">
+        <label for="dob">Ngày tháng năm sinh (Dương lịch):</label>
+        <input type="date" id="dob">
+    </div>
+
+    <button onclick="calculateNumerology()">Xem Kết Quả</button>
+
+    <div class="result-box" id="resultBox">
+        <div class="result-item">Con số Chủ Đạo (Đường đời): <span class="highlight" id="lifePathNumber">-</span></div>
+        <div class="result-item">Con số Sứ Mệnh (Tên): <span class="highlight" id="destinyNumber">-</span></div>
+    </div>
+</div>
+
+<script>
+    // Bảng quy đổi chữ cái sang số theo Pythagoras
+    const pythagorasTable = {
+        'A':1, 'J':1, 'S':1,
+        'B':2, 'K':2, 'T':2,
+        'C':3, 'L':3, 'U':3,
+        'D':4, 'M':4, 'V':4,
+        'E':5, 'N':5, 'W':5,
+        'F':6, 'O':6, 'X':6,
+        'G':7, 'P':7, 'Y':7,
+        'H':8, 'Q':8, 'Z':8,
+        'I':9, 'R':9
+    };
+
+    // Hàm xóa dấu tiếng Việt
+    function removeVietnameseTones(str) {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        return str;
+    }
+
+    // Rút gọn về số có 1 chữ số (giữ nguyên 11, 22, 33)
+    function reduceToSingleDigit(num) {
+        if (num === 11 || num === 22 || num === 33) return num;
+        while (num > 9) {
+            if (num === 11 || num === 22 || num === 33) break;
+            num = num.toString().split('').map(Number).reduce((a, b) => a + b, 0);
+        }
+        return num;
+    }
+
+    // Tính số Chủ đạo (Ngày sinh)
+    function getLifePath(dobStr) {
+        let dobDigits = dobStr.replace(/-/g, '').split('').map(Number);
+        let sum = dobDigits.reduce((a, b) => a + b, 0);
+        return reduceToSingleDigit(sum);
+    }
+
+    // Tính số Sứ mệnh (Tên)
+    function getDestiny(nameStr) {
+        let cleanName = removeVietnameseTones(nameStr).toUpperCase().replace(/[^A-Z]/g, '');
+        let sum = 0;
+        for (let char of cleanName) {
+            if (pythagorasTable[char]) {
+                sum += pythagorasTable[char];
+            }
+        }
+        return reduceToSingleDigit(sum);
+    }
+
+    // Hàm thực thi khi bấm nút
+    function calculateNumerology() {
+        let fullName = document.getElementById('fullName').value;
+        let dob = document.getElementById('dob').value;
+
+        if (!fullName || !dob) {
+            alert("Vui lòng nhập đầy đủ Họ Tên và Ngày Sinh!");
+            return;
+        }
+
+        let lifePath = getLifePath(dob);
+        let destiny = getDestiny(fullName);
+
+        document.getElementById('lifePathNumber').innerText = lifePath;
+        document.getElementById('destinyNumber').innerText = destiny;
+        document.getElementById('resultBox').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
