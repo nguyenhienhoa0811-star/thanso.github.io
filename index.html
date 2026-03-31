@@ -113,6 +113,18 @@
             margin-top: 5px;
             font-style: italic;
         }
+
+        /* Style bổ sung cho phần Đỉnh cao */
+        .pinnacle-card {
+            background: #fffdf5;
+            border: 1px solid var(--gold);
+        }
+        .age-label {
+            font-size: 11px;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -186,6 +198,33 @@
                 <div class="description">Thành tựu sau 35-40 tuổi</div>
             </div>
         </div>
+
+        <div class="category-title">
+            <span>PHẦN D: 4 ĐỈNH CAO CUỘC ĐỜI</span>
+            <i>Chu Kỳ Thịnh Vượng</i>
+        </div>
+        <div class="grid-results">
+            <div class="card pinnacle-card">
+                <span>Đỉnh Cao Thứ 1</span><b id="resP1">-</b>
+                <div class="age-label">Năm <span id="ageP1">?</span> tuổi</div>
+                <div class="description">Giai đoạn gieo hạt</div>
+            </div>
+            <div class="card pinnacle-card">
+                <span>Đỉnh Cao Thứ 2</span><b id="resP2">-</b>
+                <div class="age-label">Năm <span id="ageP2">?</span> tuổi</div>
+                <div class="description">Giai đoạn phát triển</div>
+            </div>
+            <div class="card pinnacle-card">
+                <span>Đỉnh Cao Thứ 3</span><b id="resP3">-</b>
+                <div class="age-label">Năm <span id="ageP3">?</span> tuổi</div>
+                <div class="description">Giai đoạn thu hoạch</div>
+            </div>
+            <div class="card pinnacle-card">
+                <span>Đỉnh Cao Thứ 4</span><b id="resP4">-</b>
+                <div class="age-label">Năm <span id="ageP4">?</span> tuổi</div>
+                <div class="description">Giai đoạn viên mãn</div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -209,25 +248,28 @@
     }
 
     function generateReport() {
-        const name = removeVietnameseTones(document.getElementById('fullName').value);
+        const nameInput = document.getElementById('fullName').value;
+        const name = removeVietnameseTones(nameInput);
         const dobVal = document.getElementById('dob').value;
         if (!name || !dobVal) return alert("Vui lòng nhập đầy đủ thông tin!");
 
-        const [y, m, d] = dobVal.split('-');
+        const [y, m, d] = dobVal.split('-').map(Number);
         
-        // 1. Chỉ số Đường Đời (Life Path)
-        const lp = reduceNumber(parseInt(d) + parseInt(m) + parseInt(y.split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)));
+        // 1. Chỉ số Đường Đời (Life Path) - Tính chi tiết để dùng cho Đỉnh cao
+        const d_red = reduceNumber(d, false);
+        const m_red = reduceNumber(m, false);
+        const y_red = reduceNumber(y, false);
+        const lp = reduceNumber(d_red + m_red + y_red);
         
         // 2. Chỉ số Ngày Sinh
-        const bDay = reduceNumber(parseInt(d));
+        const bDay = reduceNumber(d);
 
-        // 3. Chỉ số Thái Độ (Tháng + Ngày)
-        const attitude = reduceNumber(parseInt(d) + parseInt(m));
+        // 3. Chỉ số Thái Độ
+        const attitude = reduceNumber(d + m);
 
-        // 4. Phân tích Tên (Sứ mệnh, Nội tâm, Tính cách)
+        // 4. Phân tích Tên
         let totalName = 0, vowels = 0, consonants = 0;
         const vowelList = ['A','E','I','O','U','Y'];
-
         for (let char of name.replace(/\s/g, '')) {
             if (alphabet[char]) {
                 const val = alphabet[char];
@@ -242,7 +284,21 @@
         const personality = reduceNumber(consonants);
         const maturity = reduceNumber(lp + mission);
 
-        // Hiển thị kết quả
+        // 5. TÍNH 4 ĐỈNH CAO (PINNACLES)
+        // Công thức Pythagoras chuẩn:
+        const p1 = reduceNumber(m_red + d_red, false);
+        const p2 = reduceNumber(d_red + y_red, false);
+        const p3 = reduceNumber(p1 + p2, false);
+        const p4 = reduceNumber(m_red + y_red, false);
+
+        // Tính tuổi đạt đỉnh dựa trên Số Đường Đời (rút gọn về 1-9)
+        const lp_single = reduceNumber(lp, false);
+        const age1 = 36 - lp_single;
+        const age2 = age1 + 9;
+        const age3 = age2 + 9;
+        const age4 = age3 + 9;
+
+        // Hiển thị kết quả cơ bản
         document.getElementById('resLifePath').innerText = lp;
         document.getElementById('resMission').innerText = mission;
         document.getElementById('resBirthDay').innerText = bDay;
@@ -250,8 +306,18 @@
         document.getElementById('resPersonality').innerText = personality;
         document.getElementById('resAttitude').innerText = attitude;
         document.getElementById('resMaturity').innerText = maturity;
-        document.getElementById('resSubconscious').innerText = reduceNumber(name.split(' ').length + 5); // Logic mô phỏng
-        document.getElementById('resBalance').innerText = reduceNumber(name.split('').filter(c=>c.trim()).length); // Logic mô phỏng
+        document.getElementById('resSubconscious').innerText = reduceNumber(name.split(' ').length + 5); 
+        document.getElementById('resBalance').innerText = reduceNumber(name.split('').filter(c=>c.trim()).length);
+
+        // Hiển thị kết quả Đỉnh cao
+        document.getElementById('resP1').innerText = p1;
+        document.getElementById('ageP1').innerText = age1;
+        document.getElementById('resP2').innerText = p2;
+        document.getElementById('ageP2').innerText = age2;
+        document.getElementById('resP3').innerText = p3;
+        document.getElementById('ageP3').innerText = age3;
+        document.getElementById('resP4').innerText = p4;
+        document.getElementById('ageP4').innerText = age4;
 
         document.getElementById('report').style.display = 'block';
     }
