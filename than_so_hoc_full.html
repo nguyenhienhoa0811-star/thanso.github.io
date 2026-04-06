@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thần Số Học Pythagoras Pro</title>
+  <meta name="description" content="Phần mềm thần số học Pythagoras đầy đủ: số chủ đạo, biểu đồ ngày sinh, chỉ số tên, năm cá nhân và báo cáo chi tiết." />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#111833;
+      --panel2:#0f1730;
+      --text:#e9ecf5;
+      --muted:#a9b2cc;
+      --line:#243052;
+      --accent:#7c8cff;
+      --accent2:#67e8f9;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --chip:#1b2550;
+      --shadow: 0 18px 50px rgba(0,0,0,.28);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,140,255,.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(103,232,249,.14), transparent 26%),
+        linear-gradient(180deg, #070b16 0%, var(--bg) 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    .wrap{max-width:1250px;margin:0 auto;padding:24px}
+    .hero{
+      background: linear-gradient(135deg, rgba(124,140,255,.14), rgba(103,232,249,.08));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+      padding: 28px;
+      display:grid;
+      gap:18px;
+    }
+    .hero h1{margin:0;font-size:clamp(28px, 4vw, 44px);line-height:1.05}
+    .hero p{margin:0;color:var(--muted);max-width:900px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:20px;
+      margin-top:22px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background: rgba(17,24,51,.92);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding:20px;
+    }
+    .card h2,.card h3{margin:0 0 14px}
+    .sub{color:var(--muted);font-size:14px;margin-top:-6px;margin-bottom:14px}
+    .form{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 780px){ .form{grid-template-columns:1fr} }
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input, button, select, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid #2a355b;
+      background:#0b1227;
+      color:var(--text);
+      padding:12px 14px;
+      font:inherit;
+      outline:none;
+    }
+    input::placeholder, textarea::placeholder{color:#6f79a1}
+    input:focus, select:focus, textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(124,140,255,.18);
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    button{
+      cursor:pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#08101f;
+      font-weight:800;
+      border:none;
+      min-width: 160px;
+    }
+    button.secondary{
+      background:#0b1227;
+      color:var(--text);
+      border:1px solid #2a355b;
+    }
+    .chips{
+      display:flex;flex-wrap:wrap;gap:8px;margin-top:8px
+    }
+    .chip{
+      background:var(--chip);
+      color:#dce3ff;
+      border:1px solid rgba(255,255,255,.08);
+      padding:8px 11px;
+      border-radius:999px;
+      font-size:12px;
+    }
+    .results{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width: 780px){ .results{grid-template-columns:1fr} }
+    .metric{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:16px;
+    }
+    .metric .k{font-size:13px;color:var(--muted);margin-bottom:8px}
+    .metric .v{font-size:30px;font-weight:900;letter-spacing:.3px}
+    .metric .d{font-size:13px;color:#c8d0ea;margin-top:8px;line-height:1.5}
+    .full{grid-column:1 / -1}
+    .section{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:20px;
+    }
+    @media (max-width: 980px){ .section{grid-template-columns:1fr} }
+    .chart{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:8px;
+      max-width:380px;
+    }
+    .cell{
+      min-height:88px;
+      padding:10px;
+      border-radius:16px;
+      background:#0b1227;
+      border:1px solid #2a355b;
+      position:relative;
+    }
+    .cell .n{font-size:22px;font-weight:800}
+    .cell .lbl{position:absolute;right:10px;bottom:10px;font-size:12px;color:var(--muted)}
+    .cell.miss{
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(251,113,133,.08),
+        rgba(251,113,133,.08) 8px,
+        rgba(11,18,39,.88) 8px,
+        rgba(11,18,39,.88) 16px
+      );
+    }
+    .legend{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
+    .bubbles{display:flex;flex-wrap:wrap;gap:8px}
+    .bubble{
+      background:#0b1227;border:1px solid #2a355b;border-radius:14px;
+      padding:10px 12px;font-size:13px
+    }
+    .report{
+      white-space:pre-wrap;
+      line-height:1.7;
+      color:#d6dcf6;
+      background:#091021;
+      border:1px solid #243052;
+      border-radius:16px;
+      padding:16px;
+      min-height:200px;
+    }
+    .footer{
+      margin:18px 0 8px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+    .small{font-size:12px;color:var(--muted)}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(103,232,249,.1);
+      border:1px solid rgba(103,232,249,.18);
+      color:#dffcff;
+      font-size:12px;
+      width:fit-content;
+    }
+    .muted{color:var(--muted)}
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 640px){ .split{grid-template-columns:1fr} }
+    .note{
+      background:rgba(251,191,36,.08);
+      border:1px solid rgba(251,191,36,.18);
+      color:#fff5d4;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:13px;
+      line-height:1.6;
+    }
+    .hidden{display:none !important}
+    .pill{
+      display:inline-block;
+      margin-right:8px;
+      margin-top:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#0b1227;
+      border:1px solid #2a355b;
+      font-size:12px;
+    }
+    .hr{height:1px;background:#243052;margin:16px 0}
+    a{color:#8ddcff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="badge">Thần Số Học Pythagoras · Full HTML App</div>
+      <h1>Phần mềm thần số học đầy đủ trên một file HTML</h1>
+      <p>
+        Dùng để nhập họ tên và ngày sinh, sau đó tính các chỉ số chính, biểu đồ ngày sinh, số cá nhân theo năm/tháng/ngày,
+        các chu kỳ nền tảng và xuất báo cáo nhanh. Có thể đưa thẳng lên GitHub Pages hoặc mở offline trên trình duyệt.
+      </p>
+      <div class="chips">
+        <span class="chip">Số chủ đạo</span>
+        <span class="chip">Số sứ mệnh</span>
+        <span class="chip">Số linh hồn</span>
+        <span class="chip">Số nhân cách</span>
+        <span class="chip">Biểu đồ ngày sinh 3x3</span>
+        <span class="chip">Năm/Tháng/Ngày cá nhân</span>
+        <span class="chip">Đỉnh cao & Thử thách</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Nhập dữ liệu</h2>
+        <div class="sub">Hệ Pythagoras, tối ưu cho tiếng Việt có dấu.</div>
+        <div class="form">
+          <div>
+            <label for="fullName">Họ tên đầy đủ</label>
+            <input id="fullName" placeholder="Ví dụ: Nguyễn Văn A" />
+          </div>
+          <div>
+            <label for="birthDate">Ngày sinh</label>
+            <input id="birthDate" type="date" />
+          </div>
+          <div>
+            <label for="calcMode">Chế độ</label>
+            <select id="calcMode">
+              <option value="pythagoras" selected>Pythagoras</option>
+              <option value="compact">Rút gọn nhanh</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="btnCalc">Phân tích ngay</button>
+          <button class="secondary" id="btnExample">Điền ví dụ</button>
+          <button class="secondary" id="btnReset">Xóa dữ liệu</button>
+          <button class="secondary" id="btnCopy">Sao chép báo cáo</button>
+        </div>
+
+        <div class="hr"></div>
+        <div class="note">
+          Gợi ý triển khai GitHub: đặt file này thành <b>index.html</b>, đẩy lên repo, rồi bật GitHub Pages.
+          Đây là bản chạy độc lập, không cần backend.
+        </div>
+
+        <div style="margin-top:16px" class="split">
+          <div>
+            <h3>Danh sách chỉ số đang tính</h3>
+            <div class="bubbles" id="metricList"></div>
+          </div>
+          <div>
+            <h3>Lưu ý thuật toán</h3>
+            <div class="small" id="algoNote">
+              Tên tiếng Việt được chuẩn hóa bỏ dấu trước khi quy đổi chữ cái.
+              Các số chính được rút gọn về 1–9, trừ các số bậc thầy 11/22/33 khi phù hợp.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Kết quả nhanh</h2>
+        <div class="results" id="results">
+          <div class="metric full">
+            <div class="k">Trạng thái</div>
+            <div class="v">Chờ phân tích</div>
+            <div class="d">Nhập họ tên và ngày sinh để xem toàn bộ báo cáo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <h2>Biểu đồ ngày sinh 3x3</h2>
+        <div class="sub">Số xuất hiện trong ngày sinh được điền vào ô tương ứng.</div>
+        <div class="chart" id="chart"></div>
+        <div class="legend" id="chartLegend"></div>
+      </div>
+
+      <div class="card">
+        <h2>Chỉ số tên & chu kỳ</h2>
+        <div class="results" id="nameCycle"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <h2>Báo cáo chi tiết</h2>
+        <div class="report" id="report">Chưa có dữ liệu.</div>
+      </div>
+      <div class="card">
+        <h2>Hướng dẫn mở rộng dự án</h2>
+        <div class="small" style="line-height:1.8">
+          1. Tách logic JS sang file riêng nếu muốn bảo trì tốt hơn.<br/>
+          2. Thêm lưu lịch sử khách hàng bằng LocalStorage hoặc Firebase.<br/>
+          3. Nối AI để sinh mô tả cá nhân hóa theo từng chỉ số.<br/>
+          4. Thêm xuất PDF/Excel nếu bạn cần báo cáo chuyên nghiệp.<br/>
+          5. Có thể chuyển thành PWA để cài trên điện thoại.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© Thần Số Học Pythagoras Pro · 1 file HTML · sẵn sàng cho GitHub Pages</div>
+  </div>
+
+<script>
+(function(){
+  const letterMap = {
+    A:1,B:2,C:3,D:4,E:5,F:8,G:3,H:5,I:1,J:1,K:2,L:3,M:4,N:5,O:7,P:8,Q:1,R:2,S:3,T:4,U:6,V:6,W:6,X:5,Y:1,Z:7
+  };
+  const masterSet = new Set([11,22,33]);
+
+  const labels = {
+    lifePath: "Số chủ đạo",
+    expression: "Số sứ mệnh",
+    soulUrge: "Số linh hồn",
+    personality: "Số nhân cách",
+    birthday: "Số ngày sinh",
+    maturity: "Số trưởng thành",
+    attitude: "Số thái độ",
+    personalYear: "Năm cá nhân",
+    personalMonth: "Tháng cá nhân",
+    personalDay: "Ngày cá nhân",
+    hiddenPassion: "Đam mê ẩn",
+    challenge1: "Thử thách 1",
+    challenge2: "Thử thách 2",
+    challenge3: "Thử thách 3",
+    challenge4: "Thử thách 4",
+    pinnacle1: "Đỉnh 1",
+    pinnacle2: "Đỉnh 2",
+    pinnacle3: "Đỉnh 3",
+    pinnacle4: "Đỉnh 4"
+  };
+
+  const metricOrder = [
+    "lifePath","expression","soulUrge","personality","birthday","maturity","attitude",
+    "personalYear","personalMonth","personalDay","hiddenPassion","challenge1","challenge2",
+    "challenge3","challenge4","pinnacle1","pinnacle2","pinnacle3","pinnacle4"
+  ];
+
+  const el = id => document.getElementById(id);
+  const fullName = el("fullName");
+  const birthDate = el("birthDate");
+  const calcMode = el("calcMode");
+  const results = el("results");
+  const report = el("report");
+  const chart = el("chart");
+  const chartLegend = el("chartLegend");
+  const nameCycle = el("nameCycle");
+  const metricList = el("metricList");
+
+  function normalizeText(str){
+    return (str || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d").replace(/Đ/g, "D")
+      .toUpperCase()
+      .replace(/[^A-Z\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function reduceNumber(n, allowMaster=true){
+    if (!isFinite(n)) return 0;
+    n = Math.abs(parseInt(n,10));
+    if (n === 0) return 0;
+    while (n > 9) {
+      if (allowMaster && masterSet.has(n)) return n;
+      n = String(n).split("").reduce((a,b)=>a+Number(b),0);
+    }
+    return n;
+  }
+
+  function reduceDate(dateStr){
+    if (!dateStr) return null;
+    const digits = dateStr.replace(/-/g, "");
+    if (!digits || digits.length < 8) return null;
+    const sum = digits.split("").reduce((a,b)=>a+Number(b),0);
+    return reduceNumber(sum, true);
+  }
+
+  function sumDigits(str){
+    return (str.match(/\d/g) || []).reduce((a,b)=>a + Number(b), 0);
+  }
+
+  function calcLifePath(dateStr){
+    if (!dateStr) return 0;
+    const nums = dateStr.replace(/-/g,"").split("").map(Number);
+    const sum = nums.reduce((a,b)=>a+b,0);
+    return reduceNumber(sum, true);
+  }
+
+  function calcBirthday(dateStr){
+    if (!dateStr) return 0;
+    const day = Number(dateStr.split("-")[2]);
+    return reduceNumber(day, true);
+  }
+
+  function nameNumbers(name){
+    const clean = normalizeText(name);
+    const letters = clean.replace(/\s/g,"").split("");
+    let total = 0;
+    let vowel = 0;
+    let consonant = 0;
+    let countMap = {};
+    let hidden = new Set();
+
+    letters.forEach(ch=>{
+      const v = letterMap[ch] || 0;
+      if (!v) return;
+      total += v;
+      countMap[v] = (countMap[v] || 0) + 1;
+      if ("AEIOUY".includes(ch)) vowel += v; else consonant += v;
+      hidden.add(v);
+    });
+
+    const words = clean.split(" ").filter(Boolean);
+    const firstWord = words[0] || "";
+    const firstName = words[words.length - 1] || "";
+    const firstWordValue = firstWord.split("").reduce((a,ch)=>a+(letterMap[ch]||0),0);
+
+    const personalityValue = reduceNumber(consonant, true);
+    const soulValue = reduceNumber(vowel, true);
+    const expressionValue = reduceNumber(total, true);
+    const hiddenPassion = hidden.size ? Math.max(...Object.values(countMap)) : 0;
+    const attitudeValue = 0;
+
+    return {
+      clean,
+      total,
+      vowel,
+      consonant,
+      expression: expressionValue,
+      soulUrge: soulValue,
+      personality: personalityValue,
+      hiddenPassion: hiddenPassion || 0,
+      countMap
+    };
+  }
+
+  function personalNumbers(dateStr){
+    const now = new Date();
+    const m = now.getMonth() + 1;
+    const d = now.getDate();
+    const y = now.getFullYear();
+    const life = calcLifePath(dateStr);
+    const personalYear = reduceNumber(life + reduceNumber(y, true), true);
+    const personalMonth = reduceNumber(personalYear + m, true);
+    const personalDay = reduceNumber(personalMonth + d, true);
+    return { personalYear, personalMonth, personalDay, current: { m, d, y } };
+  }
+
+  function attitude(dateStr){
+    if (!dateStr) return 0;
+    const [y,m,d] = dateStr.split("-").map(Number);
+    return reduceNumber(m + d, true);
+  }
+
+  function maturity(lifePath, expression){
+    return reduceNumber(lifePath + expression, true);
+  }
+
+  function challenges(dateStr){
+    if (!dateStr) return [0,0,0,0];
+    const [y,m,d] = dateStr.split("-").map(Number);
+    const dd = sumDigits(String(d).padStart(2,"0"));
+    const mm = sumDigits(String(m).padStart(2,"0"));
+    const yy = sumDigits(String(y));
+    const c1 = Math.abs(dd - mm);
+    const c2 = Math.abs(dd - yy);
+    const c3 = Math.abs(c1 - c2);
+    const c4 = Math.abs(mm - yy);
+    return [reduceNumber(c1, true), reduceNumber(c2, true), reduceNumber(c3, true), reduceNumber(c4, true)];
+  }
+
+  function pinnacles(dateStr){
+    if (!dateStr) return [0,0,0,0];
+    const [y,m,d] = dateStr.split("-").map(Number);
+    const dd = sumDigits(String(d).padStart(2,"0"));
+    const mm = sumDigits(String(m).padStart(2,"0"));
+    const yy = sumDigits(String(y));
+    const p1 = reduceNumber(dd + mm, true);
+    const p2 = reduceNumber(dd + yy, true);
+    const p3 = reduceNumber(p1 + p2, true);
+    const p4 = reduceNumber(mm + yy, true);
+    return [p1,p2,p3,p4];
+  }
+
+  function buildChart(dateStr){
+    const digits = (dateStr || "").replace(/-/g,"").split("");
+    const counts = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0};
+    digits.forEach(ch => { if (counts[ch] !== undefined) counts[ch]++; });
+    const order = [
+      {n:1,l:"1"}, {n:2,l:"2"}, {n:3,l:"3"},
+      {n:4,l:"4"}, {n:5,l:"5"}, {n:6,l:"6"},
+      {n:7,l:"7"}, {n:8,l:"8"}, {n:9,l:"9"}
+    ];
+    chart.innerHTML = "";
+    order.forEach(({n,l})=>{
+      const c = document.createElement("div");
+      c.className = "cell" + (counts[n] ? "" : " miss");
+      c.innerHTML = `<div class="n">${counts[n] ? String(n).repeat(Math.min(counts[n],4)) : "—"}</div>
+                     <div class="lbl">${n}</div>`;
+      chart.appendChild(c);
+    });
+
+    const missing = [];
+    const present = [];
+    for(let i=1;i<=9;i++){
+      (counts[i] ? present : missing).push(i);
+    }
+    chartLegend.innerHTML =
+      `<span class="pill">Có: ${present.length ? present.join(", ") : "không có"}</span>` +
+      `<span class="pill">Thiếu: ${missing.length ? missing.join(", ") : "không thiếu"}</span>`;
+  }
+
+  function explainNumber(n){
+    const texts = {
+      1: "Lãnh đạo, độc lập, chủ động.",
+      2: "Hợp tác, tinh tế, cảm xúc.",
+      3: "Giao tiếp, sáng tạo, lạc quan.",
+      4: "Kỷ luật, hệ thống, bền bỉ.",
+      5: "Tự do, linh hoạt, trải nghiệm.",
+      6: "Trách nhiệm, yêu thương, chăm sóc.",
+      7: "Chiêm nghiệm, phân tích, tâm linh.",
+      8: "Thành tựu, quản trị, vật chất.",
+      9: "Phụng sự, nhân văn, lý tưởng.",
+      11: "Trực giác cao, truyền cảm hứng.",
+      22: "Kiến tạo lớn, biến ý tưởng thành hệ thống.",
+      33: "Phụng sự vô điều kiện, chữa lành."
+    };
+    return texts[n] || "Năng lượng trung tính / chưa đủ dữ liệu.";
+  }
+
+  function renderMetric(key, value, desc){
+    const div = document.createElement("div");
+    div.className = "metric";
+    div.innerHTML = `<div class="k">${labels[key]}</div><div class="v">${value}</div><div class="d">${desc}</div>`;
+    return div;
+  }
+
+  function buildReport(data){
+    const lines = [];
+    lines.push(`TÊN CHUẨN HÓA: ${data.name.clean || "(trống)"}`);
+    lines.push(`NGÀY SINH: ${data.date || "(trống)"}`);
+    lines.push("");
+    lines.push(`Số chủ đạo ${data.lifePath}: ${explainNumber(data.lifePath)}`);
+    lines.push(`Số sứ mệnh ${data.expression}: ${explainNumber(data.expression)}`);
+    lines.push(`Số linh hồn ${data.soulUrge}: ${explainNumber(data.soulUrge)}`);
+    lines.push(`Số nhân cách ${data.personality}: ${explainNumber(data.personality)}`);
+    lines.push(`Số ngày sinh ${data.birthday}: ${explainNumber(data.birthday)}`);
+    lines.push(`Số trưởng thành ${data.maturity}: ${explainNumber(data.maturity)}`);
+    lines.push(`Số thái độ ${data.attitude}: ${explainNumber(data.attitude)}`);
+    lines.push("");
+    lines.push(`Năm cá nhân ${data.personalYear}, tháng cá nhân ${data.personalMonth}, ngày cá nhân ${data.personalDay}.`);
+    lines.push(`Đam mê ẩn: ${data.hiddenPassion || 0}.`);
+    lines.push(`Thử thách: ${data.challenges.join(" - ")}.`);
+    lines.push(`Đỉnh cao: ${data.pinnacles.join(" - ")}.`);
+    lines.push("");
+    lines.push("Khuyến nghị:");
+    if (data.lifePath === 1 || data.expression === 1) lines.push("- Tập trung mục tiêu riêng và ra quyết định nhanh.");
+    if (data.lifePath === 2 || data.soulUrge === 2) lines.push("- Phát huy ngoại giao, làm việc nhóm, lắng nghe.");
+    if (data.lifePath === 4 || data.expression === 4) lines.push("- Xây hệ thống, quy trình và kỷ luật thực thi.");
+    if (data.lifePath === 8 || data.expression === 8) lines.push("- Gắn mục tiêu với kết quả, tài chính và quản trị.");
+    if (data.lifePath === 7 || data.soulUrge === 7) lines.push("- Dành thời gian nghiên cứu, học sâu và tự phản tỉnh.");
+    if (data.lifePath === 9 || data.expression === 9) lines.push("- Phát triển vai trò lan tỏa giá trị cho cộng đồng.");
+    if (data.lifePath === 11 || data.expression === 11 || data.lifePath === 22 || data.expression === 22 || data.lifePath === 33 || data.expression === 33) {
+      lines.push("- Chú ý cân bằng cảm xúc và áp lực trách nhiệm cao.");
+    }
+    return lines.join("\n");
+  }
+
+  function analyze(){
+    const name = fullName.value.trim();
+    const date = birthDate.value;
+    const nameData = nameNumbers(name);
+    const lifePath = calcLifePath(date);
+    const birthday = calcBirthday(date);
+    const expression = nameData.expression;
+    const soulUrge = nameData.soulUrge;
+    const personality = nameData.personality;
+    const maturityValue = maturity(lifePath, expression);
+    const attitudeValue = attitude(date);
+    const pn = personalNumbers(date);
+    const ch = challenges(date);
+    const pk = pinnacles(date);
+
+    const data = {
+      name: nameData,
+      date,
+      lifePath,
+      birthday,
+      expression,
+      soulUrge,
+      personality,
+      maturity: maturityValue,
+      attitude: attitudeValue,
+      personalYear: pn.personalYear,
+      personalMonth: pn.personalMonth,
+      personalDay: pn.personalDay,
+      hiddenPassion: nameData.hiddenPassion,
+      challenges: ch,
+      pinnacles: pk
+    };
+
+    results.innerHTML = "";
+    const top = document.createElement("div");
+    top.className = "metric full";
+    top.innerHTML = `
+      <div class="k">Trạng thái</div>
+      <div class="v">${name && date ? "Đã phân tích" : "Thiếu dữ liệu"}</div>
+      <div class="d">${name && date ? "Hệ thống đã tính toàn bộ chỉ số chính." : "Vui lòng nhập họ tên đầy đủ và ngày sinh."}</div>
+    `;
+    results.appendChild(top);
+
+    const map = [
+      ["lifePath", lifePath, explainNumber(lifePath)],
+      ["expression", expression, explainNumber(expression)],
+      ["soulUrge", soulUrge, explainNumber(soulUrge)],
+      ["personality", personality, explainNumber(personality)],
+      ["birthday", birthday, explainNumber(birthday)],
+      ["maturity", maturityValue, explainNumber(maturityValue)],
+      ["attitude", attitudeValue, explainNumber(attitudeValue)],
+      ["personalYear", pn.personalYear, "Năng lượng của năm hiện tại."],
+      ["personalMonth", pn.personalMonth, "Năng lượng của tháng hiện tại."],
+      ["personalDay", pn.personalDay, "Năng lượng của ngày hiện tại."],
+      ["hiddenPassion", nameData.hiddenPassion, "Số lặp lại nhiều nhất trong tên."],
+      ["challenge1", ch[0], "Thử thách đầu tiên."],
+      ["challenge2", ch[1], "Thử thách thứ hai."],
+      ["challenge3", ch[2], "Thử thách thứ ba."],
+      ["challenge4", ch[3], "Thử thách thứ tư."],
+      ["pinnacle1", pk[0], "Đỉnh cao giai đoạn 1."],
+      ["pinnacle2", pk[1], "Đỉnh cao giai đoạn 2."],
+      ["pinnacle3", pk[2], "Đỉnh cao giai đoạn 3."],
+      ["pinnacle4", pk[3], "Đỉnh cao giai đoạn 4."]
+    ];
+
+    map.forEach(([k,v,d]) => {
+      const card = renderMetric(k, v || 0, d);
+      results.appendChild(card);
+    });
+
+    nameCycle.innerHTML = "";
+    [
+      ["Số chủ đạo", lifePath],
+      ["Sứ mệnh", expression],
+      ["Linh hồn", soulUrge],
+      ["Nhân cách", personality],
+      ["Trưởng thành", maturityValue],
+      ["Thái độ", attitudeValue]
+    ].forEach(([k,v])=>{
+      const div = document.createElement("div");
+      div.className = "metric";
+      div.innerHTML = `<div class="k">${k}</div><div class="v">${v || 0}</div><div class="d">${explainNumber(v || 0)}</div>`;
+      nameCycle.appendChild(div);
+    });
+
+    buildChart(date);
+    report.textContent = buildReport(data);
+    return data;
+  }
+
+  function fillExample(){
+    fullName.value = "Nguyễn Văn A";
+    birthDate.value = "1990-08-17";
+    analyze();
+  }
+
+  function resetAll(){
+    fullName.value = "";
+    birthDate.value = "";
+    results.innerHTML = `<div class="metric full"><div class="k">Trạng thái</div><div class="v">Chờ phân tích</div><div class="d">Nhập họ tên và ngày sinh để xem toàn bộ báo cáo.</div></div>`;
+    nameCycle.innerHTML = "";
+    chart.innerHTML = "";
+    chartLegend.innerHTML = "";
+    report.textContent = "Chưa có dữ liệu.";
+  }
+
+  async function copyReport(){
+    const text = report.textContent || "";
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("Đã sao chép báo cáo.");
+    }catch(e){
+      alert("Trình duyệt không cho phép sao chép tự động. Bạn có thể bôi đen và copy thủ công.");
+    }
+  }
+
+  function renderMetricList(){
+    metricList.innerHTML = "";
+    metricOrder.forEach(k=>{
+      const span = document.createElement("span");
+      span.className = "chip";
+      span.textContent = labels[k];
+      metricList.appendChild(span);
+    });
+  }
+
+  el("btnCalc").addEventListener("click", analyze);
+  el("btnExample").addEventListener("click", fillExample);
+  el("btnReset").addEventListener("click", resetAll);
+  el("btnCopy").addEventListener("click", copyReport);
+
+  [fullName, birthDate, calcMode].forEach(node => {
+    node.addEventListener("change", () => {
+      if (fullName.value.trim() || birthDate.value) analyze();
+    });
+  });
+
+  renderMetricList();
+  buildChart("");
+})();
+</script>
+</body>
+</html>
